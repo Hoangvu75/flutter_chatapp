@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "842866677075",
+    "project_id": "chatapp-7bf56",
+    "storage_bucket": "chatapp-7bf56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842866677075:android:f5bfeafd83bc62d3e2fda6",
+        "android_client_info": {
+          "package_name": "com.example.movie_app_mvvm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842866677075-visn5voqser2fif2g66mpp76f9tvv0am.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-YQHVP0sw9UEVQogJsN2VtvTWlFed4jw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "842866677075-visn5voqser2fif2g66mpp76f9tvv0am.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "842866677075-7rg35g9qbfeqfb0a63dag7t2c9tkp46j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chatapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
