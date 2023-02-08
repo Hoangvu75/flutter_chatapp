@@ -15,13 +15,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     AppUtils.currentContext = context;
-    return const AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
       ),
-      child: Scaffold(
-        body: RegisterScreenBody(),
+      child: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: const Scaffold(
+          body: RegisterScreenBody(),
         ),
+      ),
     );
   }
 }

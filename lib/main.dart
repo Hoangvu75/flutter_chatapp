@@ -1,16 +1,22 @@
+import 'dart:io';
+
 import 'package:chatapp/screens/loginScreen/login_screen.dart';
-import 'package:chatapp/screens/otpScreen/opt_screen.dart';
 import 'package:chatapp/splash.dart';
 import 'package:chatapp/utils/app_utils.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'firebase_options.dart';
 
-
 Future<void> main() async {
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark));
+
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:chatapp/src/PColor.dart';
+import 'package:chatapp/screens/loginScreen/login_screen.dart';
 import 'package:chatapp/src/gradient_button_loading.dart';
 import 'package:chatapp/utils/app_utils.dart';
 import 'package:chatapp/viewModels/getInfoScreenViewModels/get_info_screen_viewmodels.dart';
@@ -27,7 +27,7 @@ class GetInfoScreenBody extends StatefulWidget {
   State<GetInfoScreenBody> createState() => _GetInfoScreenBodyState();
 }
 
-class _GetInfoScreenBodyState extends State<GetInfoScreenBody> {
+class _GetInfoScreenBodyState extends State<GetInfoScreenBody> with TickerProviderStateMixin {
   late GetInfoScreenViewModel gisvm;
 
   TextEditingController nameInputController = TextEditingController();
@@ -163,15 +163,13 @@ class _GetInfoScreenBodyState extends State<GetInfoScreenBody> {
             width: 250 * responsiveSize.width,
             height: 250 * responsiveSize.height,
             decoration: BoxDecoration(
-              border: Border.all(width: 2.0, color: PColors.lightColorText),
               borderRadius: BorderRadius.circular(250 * responsiveSize.width),
-              color: Colors.black,
             ),
             child: InkWell(
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
               onTap: () {
-                pickAvatarImage(ImageSource.gallery);
+                onAvatarImagePressed();
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(250 * responsiveSize.width),
@@ -202,9 +200,67 @@ class _GetInfoScreenBodyState extends State<GetInfoScreenBody> {
     );
   }
 
-  Future pickAvatarImage(ImageSource imageSource) async {
+  Future onAvatarImagePressed() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            InkWell(
+              onTap: () {
+                onImagePick(ImageSource.gallery);
+                Navigator.of(context).pop();
+              },
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 26 * responsiveSize.height),
+                  child: Center(
+                    child: Text(
+                      "Choose image from gallery",
+                      style: TextStyle(
+                        fontSize: 18 * responsiveSize.width,
+                        fontFamily: Assets.fontsSVNGilroyRegular,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Divider(
+              height: 1 * responsiveSize.height,
+            ),
+            InkWell(
+              onTap: () {
+                onImagePick(ImageSource.camera);
+                Navigator.of(context).pop();
+              },
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 26 * responsiveSize.height),
+                  child: Center(
+                    child: Text(
+                      "Capture image",
+                      style: TextStyle(
+                        fontSize: 18 * responsiveSize.width,
+                        fontFamily: Assets.fontsSVNGilroyRegular,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future onImagePick(ImageSource source) async {
     try {
-      final image = await ImagePicker().getImage(source: imageSource);
+      final image = await ImagePicker().getImage(source: source);
       if (image == null) {
         return;
       }
@@ -270,8 +326,12 @@ class _GetInfoScreenBodyState extends State<GetInfoScreenBody> {
         SvgPicture.asset(Assets.svgsIcSuccess),
         "Everything is done!",
         "Start your journey now!",
-        () {},
-        () {},
+        () {
+          CustomNavigator().pushReplacePrevious(const LoginScreen());
+        },
+        () {
+          CustomNavigator().pushReplacePrevious(const LoginScreen());
+        },
       );
     }
   }

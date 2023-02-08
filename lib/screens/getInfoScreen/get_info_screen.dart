@@ -26,30 +26,35 @@ class _GetInfoScreenState extends State<GetInfoScreen> {
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
       ),
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: PColors.colorLabelGreen,
-          title: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Text(
-              "Fill your information",
-              style: TextStyle(
-                fontSize: 18 * responsiveSize.width,
-                fontFamily: Assets.fontsSVNGilroyMedium,
+      child: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: PColors.colorLabelGreen,
+            title: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Text(
+                "Fill your information",
+                style: TextStyle(
+                  fontSize: 18 * responsiveSize.width,
+                  fontFamily: Assets.fontsSVNGilroyMedium,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
           ),
-        ),
-        body: MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (_) => GetInfoScreenViewModel(),
-            )
-          ],
-          child: GetInfoScreenBody(
-            phone: widget.phone,
-            password: widget.password,
+          body: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (_) => GetInfoScreenViewModel(),
+              )
+            ],
+            child: GetInfoScreenBody(
+              phone: widget.phone,
+              password: widget.password,
+            ),
           ),
         ),
       ),

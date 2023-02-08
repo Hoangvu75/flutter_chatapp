@@ -1,13 +1,15 @@
 import 'package:chatapp/screens/registerScreen/register_screen.dart';
 import 'package:chatapp/src/PColor.dart';
+import 'package:chatapp/src/gradient_button_loading.dart';
 import 'package:chatapp/utils/app_utils.dart';
 import 'package:chatapp/viewModels/loginScreenViewModels/login_screen_viewmodels.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+
 import '../../generated/assets.dart';
-import '../../src/gradient_button.dart';
 import '../../utils/app_functions.dart';
 
 class LoginScreenBody extends StatefulWidget {
@@ -27,6 +29,9 @@ class _LoginScreenBodyState extends State<LoginScreenBody> with TickerProviderSt
   void initState() {
     super.initState();
     lsvm = Provider.of<LoginScreenViewModel>(context, listen: false);
+
+    phoneInputController.text = '0941290612';
+    passwordInputController.text = '0941290612';
   }
 
   @override
@@ -163,11 +168,22 @@ class _LoginScreenBodyState extends State<LoginScreenBody> with TickerProviderSt
                   SizedBox(
                     height: 36 * responsiveSize.height,
                   ),
-                  GradientButton(
-                    title: "Sign in",
+                  GradientButtonLoading(
+                    title: (lsvm.loading) ? "" : "Sign in",
                     onTap: () {
-                      lsvm.login(phoneInputController.text, passwordInputController.text);
+                      if (phoneInputController.text != "" && passwordInputController.text != "") {
+                        lsvm.login(phoneInputController.text, passwordInputController.text);
+                      } else {
+                        CustomDialog().showDialog(
+                          SvgPicture.asset(Assets.svgsIcSystemError),
+                          "Oops! You got an error!",
+                          "Please fill up your phone and password.",
+                          () {},
+                          () {},
+                        );
+                      }
                     },
+                    isLoading: lsvm.loading,
                   ),
                 ],
               ),

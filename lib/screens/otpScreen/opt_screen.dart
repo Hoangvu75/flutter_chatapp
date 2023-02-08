@@ -28,30 +28,35 @@ class _OtpScreenState extends State<OtpScreen> {
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
       ),
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: PColors.colorLabelGreen,
-          leading: ScaleTap(
-            child: SvgPicture.asset(Assets.svgsIcBackCircle),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+      child: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: PColors.colorLabelGreen,
+            leading: ScaleTap(
+              child: SvgPicture.asset(Assets.svgsIcBackCircle),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            leadingWidth: 70 * responsiveSize.width,
+            title: Text(
+              "Enter OTP Code",
+              style: TextStyle(fontSize: 18 * responsiveSize.width, fontFamily: Assets.fontsSVNGilroyMedium),
+            ),
           ),
-          leadingWidth: 70 * responsiveSize.width,
-          title: Text(
-            "Enter OTP Code",
-            style: TextStyle(fontSize: 18 * responsiveSize.width, fontFamily: Assets.fontsSVNGilroyMedium),
-          ),
-        ),
-        body: MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (_) => OtpScreenViewModel(),
-            )
-          ],
-          child: OtpScreenBody(
-            phone: widget.phone,
-            password: widget.password,
+          body: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (_) => OtpScreenViewModel(),
+              )
+            ],
+            child: OtpScreenBody(
+              phone: widget.phone,
+              password: widget.password,
+            ),
           ),
         ),
       ),

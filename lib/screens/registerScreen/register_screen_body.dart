@@ -1,13 +1,11 @@
 import 'package:chatapp/screens/loginScreen/login_screen.dart';
 import 'package:chatapp/src/PColor.dart';
 import 'package:chatapp/src/gradient_button.dart';
-import 'package:chatapp/src/gradient_button_loading.dart';
 import 'package:chatapp/utils/app_functions.dart';
 import 'package:chatapp/utils/app_utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 
 import '../../generated/assets.dart';
 import '../otpScreen/opt_screen.dart';
@@ -28,9 +26,9 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> with TickerProv
   void initState() {
     super.initState();
 
-    phoneFieldController.text = "0941290612";
-    passwordFieldController.text = "0941290612";
-    rePasswordFieldController.text = "0941290612";
+    phoneFieldController.text = "0941290613";
+    passwordFieldController.text = "0941290613";
+    rePasswordFieldController.text = "0941290613";
   }
 
   @override
@@ -297,7 +295,7 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> with TickerProv
         () => {},
       );
     } else {
-      CustomNavigator().pushReplacePrevious(
+      CustomNavigator().pushNewScreen(
         OtpScreen(
           phone: phoneFieldController.text,
           password: passwordFieldController.text,

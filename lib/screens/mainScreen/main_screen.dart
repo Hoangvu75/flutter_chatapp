@@ -1,19 +1,19 @@
-import 'package:chatapp/viewModels/loginScreenViewModels/login_screen_viewmodels.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/app_utils.dart';
-import 'login_screen_body.dart';
+import '../../viewModels/mainScreenViewModels/main_screen_viewmodels.dart';
+import 'main_screen_body.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     AppUtils.currentContext = context;
@@ -29,10 +29,10 @@ class _LoginScreenState extends State<LoginScreen> {
           body: MultiProvider(
             providers: [
               ChangeNotifierProvider(
-                create: (_) => LoginScreenViewModel(),
+                create: (_) => MainScreenViewModel(),
               )
             ],
-            child: const LoginScreenBody(),
+            child: const MainScreenBody(),
           ),
         ),
       ),

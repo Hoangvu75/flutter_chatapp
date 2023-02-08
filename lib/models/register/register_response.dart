@@ -1,61 +1,50 @@
-// To parse this JSON data, do
-//
-//     final registerResponse = registerResponseFromJson(jsonString);
-
-import 'dart:convert';
-
-RegisterResponse registerResponseFromJson(String str) => RegisterResponse.fromJson(json.decode(str));
-
-String registerResponseToJson(RegisterResponse data) => json.encode(data.toJson());
-
 class RegisterResponse {
-  RegisterResponse({
-    this.success,
-    this.message,
-    this.newAccount,
-  });
-
   bool? success;
   String? message;
   NewAccount? newAccount;
 
-  factory RegisterResponse.fromJson(Map<String, dynamic> json) => RegisterResponse(
-    success: json["success"],
-    message: json["message"],
-    newAccount: NewAccount.fromJson(json["new_account"]),
-  );
+  RegisterResponse({this.success, this.message, this.newAccount});
 
-  Map<String, dynamic> toJson() => {
-    "success": success,
-    "message": message,
-    "new_account": newAccount!.toJson(),
-  };
+  RegisterResponse.fromJson(Map<String, dynamic> json) {
+    success = json['success'];
+    message = json['message'];
+    newAccount = json['new_account'] != null
+        ? NewAccount.fromJson(json['new_account'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    if (newAccount != null) {
+      data['new_account'] = newAccount!.toJson();
+    }
+    return data;
+  }
 }
 
 class NewAccount {
-  NewAccount({
-    this.username,
-    this.password,
-    this.id,
-    this.v,
-  });
-
   String? username;
   String? password;
-  String? id;
-  int? v;
+  String? sId;
+  int? iV;
 
-  factory NewAccount.fromJson(Map<String, dynamic> json) => NewAccount(
-    username: json["username"],
-    password: json["password"],
-    id: json["_id"],
-    v: json["__v"],
-  );
+  NewAccount({this.username, this.password, this.sId, this.iV});
 
-  Map<String, dynamic> toJson() => {
-    "username": username,
-    "password": password,
-    "_id": id,
-    "__v": v,
-  };
+  NewAccount.fromJson(Map<String, dynamic> json) {
+    username = json['username'];
+    password = json['password'];
+    sId = json['_id'];
+    iV = json['__v'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['username'] = username;
+    data['password'] = password;
+    data['_id'] = sId;
+    data['__v'] = iV;
+    return data;
+  }
 }

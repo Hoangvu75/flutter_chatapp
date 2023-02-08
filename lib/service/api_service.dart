@@ -1,9 +1,16 @@
 import 'dart:io';
 
+import 'package:chatapp/models/add-chat/add_chat_body.dart';
+import 'package:chatapp/models/get-chat/get_chat_body.dart';
+import 'package:chatapp/models/get-chat/get_chat_response.dart';
+import 'package:chatapp/models/get-chatbox-list/get_chatbox_list_body.dart';
+import 'package:chatapp/models/get-chatbox-list/get_chatbox_list_response.dart';
 import 'package:chatapp/models/login/login_body.dart';
+import 'package:chatapp/models/otp/generate_otp_response.dart';
 import 'package:chatapp/models/profile/add_profile_response.dart';
 import 'package:chatapp/models/register/register_body.dart';
 import 'package:chatapp/models/register/register_response.dart';
+import 'package:chatapp/models/search-phone/search_phone_body.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,8 +18,13 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../generated/assets.dart';
+import '../models/add-chat/add_chat_response.dart';
+import '../models/create-chatbox/create_chatbox_body.dart';
+import '../models/create-chatbox/create_chatbox_response.dart';
 import '../models/login/login_response.dart';
 import '../models/profile/add_profile_body.dart';
+import '../models/profile/get_profile_response.dart';
+import '../models/search-phone/search_phone_response.dart';
 import '../utils/app_functions.dart';
 import '../utils/app_utils.dart';
 
@@ -102,4 +114,27 @@ abstract class ApiService {
 
   @POST("/account/add-profile")
   Future<AddProfileResponse> postAddProfile(@Body() AddProfileBody addProfileBody);
+
+  @GET("/account/get-profile")
+  Future<GetProfileResponse> getProfile();
+
+  @POST("/authen/generate-otp")
+  Future<GenerateOtpResponse> getGenerateOTP();
+
+  @POST("/search-phone")
+  Future<SearchPhoneResponse> searchPhone(@Body() SearchPhoneBody searchPhoneBody);
+
+  @POST("/create-chatbox")
+  Future<CreateChatboxResponse> createChatbox(@Body() CreateChatboxBody createChatboxBody);
+
+  @POST("/get-chatbox-list")
+  Future<GetChatboxListResponse> getChatboxList(@Body() GetChatboxListBody getChatboxListBody);
+
+  @POST("/get-chat")
+  Future<GetChatResponse> getChat(@Body() GetChatBody getChatBody);
+
+  @POST("/add-chat")
+  Future<AddChatResponse> addChat(@Body() AddChatBody addChatBody);
 }
+
+// flutter pub run build_runner build--delete-conflicting-outputs
