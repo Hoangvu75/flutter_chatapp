@@ -47,9 +47,6 @@ class _MainScreenBodyState extends State<MainScreenBody> with TickerProviderStat
         height: MediaQuery.of(context).size.height,
         child: Column(
           children: [
-            SizedBox(
-              height: AppBar().preferredSize.height,
-            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20 * responsiveSize.width),
               child: Row(
@@ -149,16 +146,9 @@ class _MainScreenBodyState extends State<MainScreenBody> with TickerProviderStat
                 ? Column(
                     children: [
                       for (var i = 0; i < msvm.chatboxList.length; i++)
-                        ScaleTap(
-                          onPressed: () {
-                            CustomNavigator().pushReplacePrevious(
-                              ChatScreen(userList: msvm.chatboxList[i].user!),
-                            );
-                          },
-                          child: ChatBoxItem(
-                            chatList: msvm.chatboxList[i].chat!,
-                            userList: msvm.chatboxList[i].user!,
-                          ),
+                        ChatBoxItem(
+                          chatList: msvm.chatboxList[i].chat!,
+                          userList: msvm.chatboxList[i].user!,
                         ),
                     ],
                   )

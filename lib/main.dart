@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:chatapp/screens/loginScreen/login_screen.dart';
 import 'package:chatapp/splash.dart';
 import 'package:chatapp/utils/app_utils.dart';

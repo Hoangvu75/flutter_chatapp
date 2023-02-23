@@ -25,10 +25,6 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> with TickerProv
   @override
   void initState() {
     super.initState();
-
-    phoneFieldController.text = "0941290613";
-    passwordFieldController.text = "0941290613";
-    rePasswordFieldController.text = "0941290613";
   }
 
   @override

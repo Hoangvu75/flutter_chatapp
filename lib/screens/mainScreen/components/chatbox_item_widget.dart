@@ -3,8 +3,12 @@ import 'package:chatapp/models/get-chatbox-list/get_chatbox_list_response.dart';
 import 'package:chatapp/src/PColor.dart';
 import 'package:chatapp/utils/app_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_scale_tap/flutter_scale_tap.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
+
+import '../../chatScreen/chat_screen.dart';
 
 class ChatBoxItem extends StatefulWidget {
   final List<Chat> chatList;
@@ -46,129 +50,145 @@ class _ChatBoxItem extends State<ChatBoxItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(15 * responsiveSize.width),
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(
-              0 * responsiveSize.width,
-              0,
-              0,
-              20 * responsiveSize.width,
+    return ScaleTap(
+      onPressed: () {
+        Navigator.push(
+          context,
+          PageTransition(
+            type: PageTransitionType.rightToLeft,
+            duration: const Duration(milliseconds: 250),
+            child: ChatScreen(
+              userList: widget.userList,
             ),
-            padding: EdgeInsets.fromLTRB(
-              0,
-              0,
-              2 * responsiveSize.width,
-              0,
-            ),
-            width: MediaQuery.of(context).size.width,
-            height: 85 * responsiveSize.width,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50 * responsiveSize.width),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 18 * responsiveSize.width, 0),
-                  width: 60 * responsiveSize.width,
-                  height: 60 * responsiveSize.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(60 * responsiveSize.width),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5 * responsiveSize.width,
-                        blurRadius: 7 * responsiveSize.width,
-                        offset: const Offset(0, 3), // changes position of shadow
+          ),
+        );
+      },
+      child: Padding(
+        padding: EdgeInsets.all(15 * responsiveSize.width),
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.fromLTRB(
+                0 * responsiveSize.width,
+                0,
+                0,
+                20 * responsiveSize.width,
+              ),
+              padding: EdgeInsets.fromLTRB(
+                0,
+                0,
+                2 * responsiveSize.width,
+                0,
+              ),
+              width: MediaQuery.of(context).size.width,
+              height: 85 * responsiveSize.width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50 * responsiveSize.width),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 18 * responsiveSize.width, 0),
+                    width: 60 * responsiveSize.width,
+                    height: 60 * responsiveSize.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(60 * responsiveSize.width),
                       ),
-                    ],
-                    color: Colors.white,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(50 * responsiveSize.width),
-                    child: (friend.avatar != "")
-                        ? Image.network(
-                            friend.avatar!,
-                            fit: BoxFit.cover,
-                          )
-                        : SvgPicture.asset(Assets.svgsAvatarDefault),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(
-                      0,
-                      21.5 * responsiveSize.width,
-                      0,
-                      14 * responsiveSize.width,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5 * responsiveSize.width,
+                          blurRadius: 7 * responsiveSize.width,
+                          offset: const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      color: Colors.white,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.fromLTRB(
-                            1 * responsiveSize.width,
-                            0,
-                            0,
-                            6.5 * responsiveSize.width,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Text.rich(
-                                  TextSpan(
-                                    text: friend.name,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50 * responsiveSize.width),
+                      child: (friend.avatar != "")
+                          ? Image.network(
+                              friend.avatar!,
+                              fit: BoxFit.cover,
+                            )
+                          : SvgPicture.asset(Assets.svgsAvatarDefault),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(
+                        0,
+                        21.5 * responsiveSize.width,
+                        0,
+                        14 * responsiveSize.width,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.fromLTRB(
+                              1 * responsiveSize.width,
+                              0,
+                              0,
+                              6.5 * responsiveSize.width,
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Text.rich(
+                                    TextSpan(
+                                      text: friend.name,
+                                      style: TextStyle(
+                                        fontFamily: Assets.fontsSVNGilroyBold,
+                                        fontSize: 18 * responsiveSize.width,
+                                      ),
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(0, 1 * responsiveSize.width, 0, 0),
+                                  child: Text(
+                                    (time != "")
+                                        ? DateFormat('Hm')
+                                            .format(DateTime.fromMillisecondsSinceEpoch(int.parse(time)))
+                                        : "",
                                     style: TextStyle(
-                                      fontFamily: Assets.fontsSVNGilroyBold,
-                                      fontSize: 18 * responsiveSize.width,
+                                      fontFamily: Assets.fontsSVNGilroyRegular,
+                                      fontSize: 12 * responsiveSize.width,
+                                      fontStyle: FontStyle.italic,
+                                      color: PColors.lightColorText,
                                     ),
                                   ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
                                 ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.fromLTRB(0, 1 * responsiveSize.width, 0, 0),
-                                child: Text(
-                                  (time != "")
-                                      ? DateFormat('Hm')
-                                          .format(DateTime.fromMillisecondsSinceEpoch(int.parse(time)))
-                                      : "",
-                                  style: TextStyle(
-                                    fontFamily: Assets.fontsSVNGilroyRegular,
-                                    fontSize: 12 * responsiveSize.width,
-                                    fontStyle: FontStyle.italic,
-                                    color: PColors.lightColorText,
-                                  ),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        Text(
-                          (widget.chatList.isNotEmpty)
-                          ? (self.phone != widget.chatList.last.sender) ? "${friend.name}: "
-                              "$lastMessage" : "You: $lastMessage"
-                          : "",
-                          style: TextStyle(fontSize: 12 * responsiveSize.width, color: PColors.lightColorText),
-                        )
-                      ],
+                          Text(
+                            (widget.chatList.isNotEmpty)
+                                ? (self.phone != widget.chatList.last.sender)
+                                    ? "${friend.name}: "
+                                        "$lastMessage"
+                                    : "You: $lastMessage"
+                                : "",
+                            style: TextStyle(fontSize: 12 * responsiveSize.width, color: PColors.lightColorText),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Divider(
-            height: 1 * responsiveSize.width,
-          ),
-        ],
+            Divider(
+              height: 1 * responsiveSize.width,
+            ),
+          ],
+        ),
       ),
     );
   }

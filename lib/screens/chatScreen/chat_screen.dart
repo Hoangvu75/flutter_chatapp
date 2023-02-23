@@ -7,9 +7,11 @@ import 'package:provider/provider.dart';
 
 import '../../utils/app_utils.dart';
 import '../../viewModels/chatScreenViewModels/chat_screen_viewmodels.dart';
+import '../../viewModels/mainScreenViewModels/main_screen_viewmodels.dart';
 
 class ChatScreen extends StatefulWidget {
   final List<GCLRUser> userList;
+
   const ChatScreen({super.key, required this.userList});
 
   @override
@@ -29,16 +31,18 @@ class _ChatScreenState extends State<ChatScreen> {
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: Scaffold(
-          body: MultiProvider(
-            providers: [
-              ChangeNotifierProvider(
-                create: (_) => ChatScreenViewModel(),
-              ),
-              ChangeNotifierProvider(
-                create: (_) => ScrollControllerProvider(),
-              )
-            ],
-            child: ChatScreenBody(userList: widget.userList,),
+          body: SafeArea(
+            child: MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (_) => ChatScreenViewModel(),
+                ),
+                ChangeNotifierProvider(
+                  create: (_) => ScrollControllerProvider(),
+                )
+              ],
+              child: ChatScreenBody(userList: widget.userList),
+            ),
           ),
         ),
       ),

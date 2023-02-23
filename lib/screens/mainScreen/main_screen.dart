@@ -26,13 +26,15 @@ class _MainScreenState extends State<MainScreen> {
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: Scaffold(
-          body: MultiProvider(
-            providers: [
-              ChangeNotifierProvider(
-                create: (_) => MainScreenViewModel(),
-              )
-            ],
-            child: const MainScreenBody(),
+          body: SafeArea(
+            child: MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (_) => MainScreenViewModel(),
+                )
+              ],
+              child: const MainScreenBody(),
+            ),
           ),
         ),
       ),

@@ -1,7 +1,8 @@
 import 'package:chatapp/models/get-chat/get_chat_body.dart';
 import 'package:chatapp/models/get-chatbox-list/get_chatbox_list_response.dart';
 import 'package:chatapp/screens/chatScreen/components/chat_item.dart';
-import 'package:chatapp/screens/mainScreen/main_screen.dart';
+import 'package:chatapp/screens/meetingScreen/calling_screen.dart';
+import 'package:chatapp/utils/app_functions.dart';
 import 'package:chatapp/utils/app_utils.dart';
 import 'package:chatapp/viewModels/chatScreenViewModels/chat_screen_viewmodels.dart';
 import 'package:flutter/foundation.dart';
@@ -16,8 +17,9 @@ import 'package:socket_io_client/socket_io_client.dart';
 import '../../generated/assets.dart';
 import '../../models/add-chat/add_chat_body.dart';
 import '../../src/PColor.dart';
-import '../../utils/app_functions.dart';
 import '../../viewModels/chatScreenViewModels/scroll_controller_provider.dart';
+import '../meetingScreen/api.dart';
+import '../meetingScreen/meeting_screen.dart';
 
 class ChatScreenBody extends StatefulWidget {
   final List<GCLRUser> userList;
@@ -80,9 +82,7 @@ class _ChatScreenBodyState extends State<ChatScreenBody> with TickerProviderStat
   }
 
   void initSocket() {
-    // socket = IO.io('http://192.168.1.4:3000', OptionBuilder().setTransports(['websocket']).build());
-    socket = io.io('https://chatapp-server-production-95e0.up.railway.app',
-        OptionBuilder().setTransports(['websocket']).build());
+    socket = io.io(baseUrl, OptionBuilder().setTransports(['websocket']).build());
 
     socket.onConnect((_) {
       if (kDebugMode) {
@@ -96,6 +96,15 @@ class _ChatScreenBodyState extends State<ChatScreenBody> with TickerProviderStat
       }
       csvm.onAddFakeChat(data, 1);
       scp.jumpToMaxPosition();
+    });
+
+    socket.on('call response', (data) {
+      String meetingId = data;
+      CustomNavigator().pushNewScreen(
+          CallingScreen(
+        friend: friend,
+        meetingId: meetingId,
+      ));
     });
 
     socket.onDisconnect((_) {
@@ -128,9 +137,6 @@ class _ChatScreenBodyState extends State<ChatScreenBody> with TickerProviderStat
     return Column(
       children: [
         SizedBox(
-          height: AppBar().preferredSize.height,
-        ),
-        SizedBox(
           height: 20 * responsiveSize.height,
         ),
         Row(
@@ -139,9 +145,9 @@ class _ChatScreenBodyState extends State<ChatScreenBody> with TickerProviderStat
               width: 10 * responsiveSize.width,
             ),
             ScaleTap(
-              onPressed: () => CustomNavigator().pushReplacePrevious(
-                const MainScreen(),
-              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
               child: Icon(
                 Icons.arrow_back,
                 color: PColors.colorLabelGreen,
@@ -213,8 +219,17 @@ class _ChatScreenBodyState extends State<ChatScreenBody> with TickerProviderStat
             ),
             ScaleTap(
               onPressed: () async {
-                var platform = const MethodChannel("MY_CHANNEL");
-                await platform.invokeMethod("navToVideoCall");
+                String meetingId = await createMeeting();
+                socket.emit("call request", meetingId);
+                CustomNavigator().pushNewScreen(
+                  MeetingScreen(
+                    meetingId: meetingId,
+                    token: token,
+                    leaveMeeting: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                );
               },
               child: Container(
                 width: 45 * responsiveSize.width,
@@ -269,49 +284,74 @@ class _ChatScreenBodyState extends State<ChatScreenBody> with TickerProviderStat
                 : Container(),
           ),
         ),
-        TextFormField(
-          controller: textEditingController,
-          onFieldSubmitted: (value) {
-            socket.emit("chat request", (value));
-            csvm.onAddFakeChat(value, 0);
-            csvm.onAddChat(
-              ACBUser(
-                accountId: widget.userList[0].accountId!,
-                phone: widget.userList[0].phone!,
-                name: widget.userList[0].name!,
-                birthday: widget.userList[0].birthday!,
-                avatar: widget.userList[0].avatar!,
-                id: widget.userList[0].sId!,
-              ),
-              ACBUser(
-                accountId: widget.userList[1].accountId!,
-                phone: widget.userList[1].phone!,
-                name: widget.userList[1].name!,
-                birthday: widget.userList[1].birthday!,
-                avatar: widget.userList[1].avatar!,
-                id: widget.userList[1].sId!,
-              ),
-              value,
-            );
-            scp.jumpToMaxPosition();
-            textEditingController.clear();
-          },
-          decoration: const InputDecoration(
-            prefixIcon: Icon(Icons.tag_faces_sharp),
-            hintText: 'message',
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey,
-                width: 1,
+        Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                controller: textEditingController,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.tag_faces_sharp),
+                  hintText: 'message',
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey,
+                      width: 1,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey,
+                      width: 1,
+                    ),
+                  ),
+                ),
               ),
             ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey,
-                width: 1,
+            SizedBox(width: 10 * responsiveSize.width),
+            Container(
+              padding: EdgeInsets.all(10 * responsiveSize.width),
+              decoration: BoxDecoration(
+                color: const Color.fromRGBO(0, 166, 122, 1.0),
+                borderRadius: BorderRadius.circular(
+                  50 * responsiveSize.width,
+                ),
+              ),
+              child: ScaleTap(
+                onPressed: () {
+                  socket.emit("chat request", textEditingController.text);
+                  csvm.onAddFakeChat(textEditingController.text, 0);
+                  csvm.onAddChat(
+                    ACBUser(
+                      accountId: widget.userList[0].accountId!,
+                      phone: widget.userList[0].phone!,
+                      name: widget.userList[0].name!,
+                      birthday: widget.userList[0].birthday!,
+                      avatar: widget.userList[0].avatar!,
+                      id: widget.userList[0].sId!,
+                    ),
+                    ACBUser(
+                      accountId: widget.userList[1].accountId!,
+                      phone: widget.userList[1].phone!,
+                      name: widget.userList[1].name!,
+                      birthday: widget.userList[1].birthday!,
+                      avatar: widget.userList[1].avatar!,
+                      id: widget.userList[1].sId!,
+                    ),
+                    textEditingController.text,
+                  );
+                  scp.jumpToMaxPosition();
+                  textEditingController.clear();
+                },
+                child: const Icon(
+                  Icons.send_rounded,
+                  color: Colors.white,
+                ),
               ),
             ),
-          ),
+            SizedBox(
+              width: 10 * responsiveSize.width,
+            )
+          ],
         ),
       ],
     );

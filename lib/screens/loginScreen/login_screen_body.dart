@@ -29,9 +29,6 @@ class _LoginScreenBodyState extends State<LoginScreenBody> with TickerProviderSt
   void initState() {
     super.initState();
     lsvm = Provider.of<LoginScreenViewModel>(context, listen: false);
-
-    phoneInputController.text = '0941290612';
-    passwordInputController.text = '0941290612';
   }
 
   @override
